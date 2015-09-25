@@ -178,6 +178,7 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     self.addressBarView.addContactsButton.hidden = NO;
+    [self prefillParticipants];
     return YES;
 }
 
@@ -253,10 +254,7 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
         if ([self.delegate respondsToSelector:@selector(addressBarViewController:searchForParticipantsMatchingText:completion:)]) {
             [self.delegate addressBarViewController:self searchForParticipantsMatchingText:searchText completion:^(NSArray *participants) {
                 if (![enteredText isEqualToString:textView.text]) return;
-                self.tableView.hidden = NO;
-                self.participants = [self filteredParticipants:participants];
-                [self.tableView reloadData];
-                [self.tableView setContentOffset:CGPointZero animated:NO];
+                [self displayParticipants:participants];
             }];
         }
     }
@@ -384,6 +382,26 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     self.participants = nil;
     self.tableView.hidden = YES;
     [self.tableView reloadData];
+    [self prefillParticipants];
+}
+
+- (void)prefillParticipants
+{
+    if ([self.delegate respondsToSelector:@selector(addressBarViewController:retreivePrefilledParticipantsWithCompletion:)]) {
+        [self.delegate addressBarViewController:self retreivePrefilledParticipantsWithCompletion:^(NSArray *participants) {
+            if (!self.addressBarView.addressBarTextView.text.length) {
+                [self displayParticipants:participants];
+            }
+        }];
+    }
+}
+
+- (void)displayParticipants:(NSArray *)participants
+{
+    self.tableView.hidden = NO;
+    self.participants = [self filteredParticipants:participants];
+    [self.tableView reloadData];
+    [self.tableView setContentOffset:CGPointZero animated:NO];
 }
 
 - (NSOrderedSet *)participantsInAttributedString:(NSAttributedString *)attributedString
