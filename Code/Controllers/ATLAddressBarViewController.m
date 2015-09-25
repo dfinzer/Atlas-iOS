@@ -181,6 +181,11 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     return YES;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self setDefaultParticipantsIfNecessary];
+}
+
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
     self.addressBarView.addContactsButton.hidden = YES;
@@ -253,13 +258,15 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
         if ([self.delegate respondsToSelector:@selector(addressBarViewController:searchForParticipantsMatchingText:completion:)]) {
             [self.delegate addressBarViewController:self searchForParticipantsMatchingText:searchText completion:^(NSArray *participants) {
                 if (![enteredText isEqualToString:textView.text]) return;
-                self.tableView.hidden = NO;
-                self.participants = [self filteredParticipants:participants];
-                [self.tableView reloadData];
-                [self.tableView setContentOffset:CGPointZero animated:NO];
+                [self displayParticipants:participants];
             }];
         }
     }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    self.tableView.hidden = YES;
 }
 
 #pragma mark - Actions
@@ -384,6 +391,27 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     self.participants = nil;
     self.tableView.hidden = YES;
     [self.tableView reloadData];
+    [self setDefaultParticipantsIfNecessary];
+}
+
+- (void)setDefaultParticipantsIfNecessary
+{
+    if ([self.delegate respondsToSelector:@selector(addressBarViewController:setDefaultParticipantsWithCompletion:)]) {
+        [self.delegate addressBarViewController:self setDefaultParticipantsWithCompletion:^(NSArray *participants) {
+            NSString *searchText = [self textForSearchFromTextView:self.addressBarView.addressBarTextView];
+            if (!searchText.length && self.addressBarView.addressBarTextView.isFirstResponder) {
+                [self displayParticipants:participants];
+            }
+        }];
+    }
+}
+
+- (void)displayParticipants:(NSArray *)participants
+{
+    self.tableView.hidden = NO;
+    self.participants = [self filteredParticipants:participants];
+    [self.tableView reloadData];
+    [self.tableView setContentOffset:CGPointZero animated:NO];
 }
 
 - (NSOrderedSet *)participantsInAttributedString:(NSAttributedString *)attributedString

@@ -176,6 +176,24 @@ extern NSString *const ATLAddContactsButtonAccessibilityLabel;
     [delegateMock verify];
 }
 
+//- (void)addressBarViewController:(ATLAddressBarViewController *)addressBarViewController setDefaultParticipantsWithCompletion:(void (^)(NSArray *participants))completion;
+- (void)testToVerifyAddressBarFunctionaltyDefaultParticipants
+{
+    [tester waitForViewWithAccessibilityLabel:ATLAddressBarAccessibilityLabel];
+    ATLAddressBarViewController *addressBar = self.viewController.addressBarController;
+    id delegateMock = OCMProtocolMock(@protocol(ATLAddressBarViewControllerDelegate));
+    addressBar.delegate = delegateMock;
+    
+    [[[delegateMock expect] andDo:^(NSInvocation *invocation) {
+        ATLAddressBarViewController *controller;
+        [invocation getArgument:&controller atIndex:2];
+        expect(controller).to.beKindOf([ATLAddressBarViewController class]);
+    }] addressBarViewController:[OCMArg any] setDefaultParticipantsWithCompletion:[OCMArg any]];
+    
+    [tester enterText:@"" intoViewWithAccessibilityLabel:ATLAddressBarTextViewAccesssibilityLabel];
+    [delegateMock verify];
+}
+
 - (void)testToVerifySelectingParticipant
 {
     [tester waitForViewWithAccessibilityLabel:ATLAddressBarAccessibilityLabel];

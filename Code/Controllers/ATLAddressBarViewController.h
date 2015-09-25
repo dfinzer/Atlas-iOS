@@ -74,13 +74,21 @@
 - (void)addressBarViewControllerDidSelectWhileDisabled:(ATLAddressBarViewController *)addressBarViewController;
 
 /**
- @abstract Asks the data source for an NSSet of participants given a search string.
- @param addressBarViewController The `ATLAddressBarViewController` in which the tap occurred.
+ @abstract Asks the data source for an NSArray of participants given a search string.
+ @param addressBarViewController The `ATLAddressBarViewController` in which the search occurred.
  @param searchText The text upon which a participant search should be performed.
  @param completion The completion block to be called upon search completion.
  @discussion Search should be performed across each `ATLParticipant` object's fullName property.
  */
 - (void)addressBarViewController:(ATLAddressBarViewController *)addressBarViewController searchForParticipantsMatchingText:(NSString *)searchText completion:(void (^)(NSArray *participants))completion;
+
+/**
+ @abstract Asks the data source for an NSArray of participants that will be used to prefill the participant list.
+ @param addressBarViewController The `ATLAddressBarViewController` to prefill.
+ @param completion The completion block to be called upon retrieval of the participants.
+ @discussion This can be used to prefill the participants table view with a default list of participants.
+ */
+- (void)addressBarViewController:(ATLAddressBarViewController *)addressBarViewController setDefaultParticipantsWithCompletion:(void (^)(NSArray *participants))completion;
 
 @end
 
