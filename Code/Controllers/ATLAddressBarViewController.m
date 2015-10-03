@@ -22,6 +22,7 @@
 #import "ATLConstants.h"
 #import "ATLAddressBarContainerView.h"
 #import "ATLMessagingUtilities.h"
+#import "ATLParticipantTableViewCell.h"
 
 @interface ATLAddressBarViewController () <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -63,7 +64,7 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 56;
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ATLMParticpantCellIdentifier];
+    [self.tableView registerClass:[ATLParticipantTableViewCell class] forCellReuseIdentifier:ATLMParticpantCellIdentifier];
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.tableView.hidden = YES;
     [self.view addSubview:self.tableView];
@@ -149,11 +150,12 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ATLMParticpantCellIdentifier];
+    ATLParticipantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ATLMParticpantCellIdentifier];
     id<ATLParticipant> participant = self.participants[indexPath.row];
-    cell.textLabel.text = participant.fullName;
-    cell.textLabel.font = ATLMediumFont(16);
-    cell.textLabel.textColor = ATLBlueColor();
+    [cell presentParticipant:participant withSortType:ATLParticipantPickerSortTypeFirstName shouldShowAvatarItem:true];
+//    cell.textLabel.text = participant.fullName;
+//    cell.textLabel.font = ATLMediumFont(16);
+//    cell.textLabel.textColor = ATLBlueColor();
     return cell;
 }
 
