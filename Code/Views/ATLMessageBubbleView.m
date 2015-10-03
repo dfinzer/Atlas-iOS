@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
         _progressView = [[ATLProgressView alloc] initWithFrame:CGRectMake(0, 0, 128.0f, 128.0f)];
         _progressView.translatesAutoresizingMaskIntoConstraints = NO;
         _progressView.alpha = 1.0f;
+        _progressView.hidden = YES;
         [self addSubview:_progressView];
         
         [self configureBubbleViewLabelConstraints];

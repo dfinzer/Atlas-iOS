@@ -82,6 +82,13 @@
  */
 - (void)addressBarViewController:(ATLAddressBarViewController *)addressBarViewController searchForParticipantsMatchingText:(NSString *)searchText completion:(void (^)(NSArray *participants))completion;
 
+/**
+ @abstract Asks the data source whether the avatar should be shown in the address bar's table view. If not overrided, will default to NO.
+ @param addressBarViewController The `ATLAddressBarViewController` to configure.
+ @discussion Can be used to show avatars in the participant list.
+ */
+- (BOOL)addressBarViewControllerShouldShowAvatar:(ATLAddressBarViewController *)addressBarViewController;
+
 @end
 
 /**
