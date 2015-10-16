@@ -20,6 +20,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ATLAddressBarViewController.h"
+#import "ATLConversationView.h"
 #import "ATLMessageInputToolbar.h"
 #import "ATLTypingIndicatorViewController.h"
 
@@ -32,6 +33,11 @@
 ///---------------------------------------------------------------
 /// @name Accessing User Interface Components
 ///---------------------------------------------------------------
+
+/**
+@abstract The `ATLConversationView` displayed.
+*/
+@property (nonatomic) ATLConversationView *view;
 
 /**
  @abstract The `ATLAddressBarViewController` displayed for addressing new conversations or displaying names of current conversation participants.

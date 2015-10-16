@@ -25,7 +25,6 @@
 
 @interface ATLBaseConversationViewController ()
 
-@property (nonatomic) ATLConversationView *view;
 @property (nonatomic) NSMutableArray *typingParticipantIDs;
 @property (nonatomic) NSLayoutConstraint *typingIndicatorViewBottomConstraint;
 @property (nonatomic) CGFloat keyboardHeight;
