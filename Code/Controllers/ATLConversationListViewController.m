@@ -173,7 +173,7 @@ NSString *const ATLConversationListViewControllerDeletionModeGlobal = @"Global";
     if (self.hasAppeared) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot change cell class after the view has been presented" userInfo:nil];
     }
-    if (!class_conformsToProtocol(cellClass, @protocol(ATLConversationPresenting))) {
+    if (![cellClass conformsToProtocol:@protocol(ATLConversationPresenting)]) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cell class must conform to ATLConversationPresenting" userInfo:nil];
     }
     _cellClass = cellClass;
